@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:vaipoing_test/checkBoxes/check_green.dart';
-import 'package:vaipoing_test/checkBoxes/check_red.dart';
-import 'package:vaipoing_test/checkBoxes/check_yellow.dart';
+import 'package:vaipoing_test/checkboxes/check_green.dart';
+import 'package:vaipoing_test/checkboxes/check_red.dart';
+import 'package:vaipoing_test/checkboxes/check_yellow.dart';
 
 /// Главная страница приложения, вызывается из [main]
 ///
