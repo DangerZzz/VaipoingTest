@@ -1,9 +1,8 @@
 import 'dart:async';
+import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:vaipoing_test/checkboxes/check_green.dart';
-import 'package:vaipoing_test/checkboxes/check_red.dart';
-import 'package:vaipoing_test/checkboxes/check_yellow.dart';
+import 'package:vaipoing_test/customized_widgets/checkbox.dart';
 
 /// Главная страница приложения, вызывается из [main]
 ///
@@ -19,6 +18,37 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+
+    listCheck.add(
+      StreamBuilder(
+        stream: _controllerDuration.stream,
+        initialData: duration,
+        builder:
+            (BuildContext context, AsyncSnapshot<Duration> snapshotDuration) {
+          return StreamBuilder(
+            stream: _checkBoxGreenStream,
+            initialData: greenFlag,
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              return CustomCheckbox(
+                value: snapshot.data,
+                color: Colors.green,
+                duration: snapshotDuration.data,
+                onTap: (changedValue) {
+                  if (redFlag || yellowFlag) {
+                    redFlag = false;
+                    yellowFlag = false;
+                    _controllerYellow.add(false);
+                    _controllerRed.add(false);
+                  }
+                  _controllerGreen.add(changedValue);
+                  greenFlag = changedValue;
+                },
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 
   ///Стримы для контроллеров значений чекбоксов
@@ -43,8 +73,6 @@ class _MainPageState extends State<MainPage> {
   ///Длительность
   final StreamController<Duration> _controllerDuration =
       StreamController<Duration>.broadcast();
-
-  Stream<Duration> get _durationStream => _controllerDuration.stream;
 
   ///Список чекбоксов для отображения
   var listCheck = <Widget>[];
@@ -80,16 +108,19 @@ class _MainPageState extends State<MainPage> {
                     alignment: Alignment.center,
                     child: Column(
                       children: [
-                        GridView.count(
-                          shrinkWrap: true,
-                          physics: const ScrollPhysics(),
-                          crossAxisCount: 7,
-                          children: [
-                            for (var i = 0; i < listCheck.length; i++) ...[
-                              listCheck[i],
-                            ],
-                          ],
-                        ),
+                        listCheck.length == 1
+                            ? listCheck[0]
+                            : GridView.count(
+                                shrinkWrap: true,
+                                physics: const ScrollPhysics(),
+                                crossAxisCount: 7,
+                                children: List.generate(
+                                  listCheck.length,
+                                  (index) {
+                                    return listCheck[index];
+                                  },
+                                ),
+                              ),
                         const Padding(
                           padding: EdgeInsets.only(top: 12.0),
                           child: Text('AnimationDuration'),
@@ -102,16 +133,18 @@ class _MainPageState extends State<MainPage> {
                           inactiveColor: Colors.green.withOpacity(0.3),
                           thumbColor: Colors.green,
                           onChanged: (double value) {
-                            setState(() {
-                              duration = Duration(
-                                milliseconds: value.toInt(),
-                              );
-                              _controllerDuration.add(
-                                Duration(
+                            setState(
+                              () {
+                                duration = Duration(
                                   milliseconds: value.toInt(),
-                                ),
-                              );
-                            });
+                                );
+                                _controllerDuration.add(
+                                  Duration(
+                                    milliseconds: value.toInt(),
+                                  ),
+                                );
+                              },
+                            );
                           },
                         ),
                         Padding(
@@ -131,7 +164,7 @@ class _MainPageState extends State<MainPage> {
                           /// Список из возможных вариаций чекбоксов
                           var list = [
                             StreamBuilder(
-                              stream: _durationStream,
+                              stream: _controllerDuration.stream,
                               initialData: duration,
                               builder: (BuildContext context,
                                   AsyncSnapshot<Duration> snapshotDuration) {
@@ -140,8 +173,9 @@ class _MainPageState extends State<MainPage> {
                                   initialData: greenFlag,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<bool> snapshot) {
-                                    return CheckboxGreen(
+                                    return CustomCheckbox(
                                       value: snapshot.data,
+                                      color: Colors.green,
                                       duration: snapshotDuration.data,
                                       onTap: (changedValue) {
                                         if (redFlag || yellowFlag) {
@@ -159,7 +193,7 @@ class _MainPageState extends State<MainPage> {
                               },
                             ),
                             StreamBuilder(
-                              stream: _durationStream,
+                              stream: _controllerDuration.stream,
                               initialData: duration,
                               builder: (BuildContext context,
                                   AsyncSnapshot<Duration> snapshotDuration) {
@@ -168,8 +202,9 @@ class _MainPageState extends State<MainPage> {
                                   initialData: redFlag,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<bool> snapshot) {
-                                    return CheckboxRed(
+                                    return CustomCheckbox(
                                       value: snapshot.data,
+                                      color: Colors.red,
                                       duration: snapshotDuration.data,
                                       onTap: (changedValue) {
                                         if (greenFlag || yellowFlag) {
@@ -187,7 +222,7 @@ class _MainPageState extends State<MainPage> {
                               },
                             ),
                             StreamBuilder(
-                              stream: _durationStream,
+                              stream: _controllerDuration.stream,
                               initialData: duration,
                               builder: (BuildContext context,
                                   AsyncSnapshot<Duration> snapshotDuration) {
@@ -196,8 +231,9 @@ class _MainPageState extends State<MainPage> {
                                   initialData: yellowFlag,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<bool> snapshot) {
-                                    return CheckboxYellow(
+                                    return CustomCheckbox(
                                       value: snapshot.data,
+                                      color: Colors.orangeAccent,
                                       duration: snapshotDuration.data,
                                       onTap: (changedValue) {
                                         if (greenFlag || redFlag) {
@@ -224,11 +260,13 @@ class _MainPageState extends State<MainPage> {
                           }
 
                           /// Добавление элементов в исходный список
-                          setState(() {
-                            for (var i = 0; i < 10; i++) {
-                              listCheck.add(newNewList[i]);
-                            }
-                          });
+                          setState(
+                            () {
+                              for (var i = 0; i < 10; i++) {
+                                listCheck.add(newNewList[i]);
+                              }
+                            },
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -252,9 +290,11 @@ class _MainPageState extends State<MainPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            listCheck.clear();
-                          });
+                          setState(
+                            () {
+                              listCheck.clear();
+                            },
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(

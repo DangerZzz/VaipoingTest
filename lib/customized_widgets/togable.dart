@@ -138,6 +138,7 @@ mixin ToggleableStateMixin<S extends StatefulWidget>
   @override
   void initState() {
     super.initState();
+
     _positionController = AnimationController(
       duration: _kToggleDuration,
       value: value == false ? 0.0 : 1.0,
@@ -315,8 +316,18 @@ mixin ToggleableStateMixin<S extends StatefulWidget>
     required CustomPainter painter,
     required Duration duration,
   }) {
-    _kReactionFadeDuration = duration;
     _kToggleDuration = duration;
+    _positionController = AnimationController(
+      duration: _kToggleDuration,
+      value: value == false ? 0.0 : 1.0,
+      vsync: this,
+    );
+    _position = CurvedAnimation(
+      parent: _positionController,
+      curve: Curves.easeIn,
+      reverseCurve: Curves.easeOut,
+    );
+
     return FocusableActionDetector(
       actions: _actionMap,
       focusNode: focusNode,
