@@ -59,6 +59,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    /// Высота экрана
+    final height = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -69,7 +72,7 @@ class _MainPageState extends State<MainPage> {
               alignment: Alignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height - kToolbarHeight,
+                  height: height - kToolbarHeight,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 96.0),

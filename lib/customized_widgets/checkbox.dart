@@ -91,6 +91,7 @@ class _CheckboxState extends State<Checkbox>
   void initState() {
     super.initState();
     _previousValue = widget.value;
+    _previousDuration = widget.duration;
   }
 
   final _CheckboxPainter _painter = _CheckboxPainter();
@@ -105,6 +106,8 @@ class _CheckboxState extends State<Checkbox>
   bool? get value => widget.value;
 
   bool? _previousValue;
+
+  Duration? _previousDuration;
 
   MaterialStateProperty<Color?> get _widgetFillColor {
     return MaterialStateProperty.resolveWith((states) {
@@ -137,6 +140,9 @@ class _CheckboxState extends State<Checkbox>
     if (oldWidget.value != widget.value) {
       _previousValue = oldWidget.value;
       animateToValue();
+    }
+    if (oldWidget.duration != widget.duration) {
+      _previousDuration = widget.duration;
     }
   }
 
@@ -251,7 +257,7 @@ class _CheckboxState extends State<Checkbox>
           ..size = widget.size,
 
         /// Измененное значение
-        duration: widget.duration,
+        duration: _previousDuration!,
       ),
     );
   }
@@ -298,11 +304,22 @@ class _CheckboxPainter extends ToggleablePainter {
     notifyListeners();
   }
 
+  Duration? get previousDuration => _previousDuration;
+
+  set previousDuration(Duration? value) {
+    if (_previousDuration == value) {
+      return;
+    }
+    _previousDuration = value;
+    notifyListeners();
+  }
+
   bool? get value => _value;
   Color? _checkColor;
   double _size = 20.0;
   bool? _value;
   bool? _previousValue;
+  Duration? _previousDuration;
 
   @override
   void paint(Canvas canvas, Size size) {
