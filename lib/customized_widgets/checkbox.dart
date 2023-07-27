@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart'
     hide ToggleableStateMixin, ToggleablePainter;
-import 'package:vaipoing_test/togable.dart';
+import 'package:vaipoing_test/customized_widgets/togable.dart';
 
+/// Измененный класс [Checkbox] из [material.dart]
+///
+/// Основные изменения:
+/// [duration] - новое поле для изменение скорости анимации
+/// Добавлены функции [_drawCircle] и [_drawMyCheck] для отрисовки элементов
+///
 class Checkbox extends StatefulWidget {
   /// The width of a checkbox widget.
   static const double width = 30.0;
@@ -9,7 +15,7 @@ class Checkbox extends StatefulWidget {
   /// Checkbox size
   final double size;
 
-  /// Checkbox size
+  /// Checkbox animateDuration
   final Duration duration;
 
   /// Whether this checkbox is checked.
@@ -243,6 +249,8 @@ class _CheckboxState extends State<Checkbox>
           ..value = value
           ..previousValue = _previousValue
           ..size = widget.size,
+
+        /// Измененное значение
         duration: widget.duration,
       ),
     );

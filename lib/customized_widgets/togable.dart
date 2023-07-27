@@ -1,10 +1,12 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide ToggleableStateMixin;
 import 'package:flutter/rendering.dart';
+
+///Изменен ради переопределения длительности анимации в функции
+///[buildToggleable] для констант
+///      _kReactionFadeDuration = duration;
+///     _kToggleDuration = duration;
+///
 
 // Duration of the animation that moves the toggle from one state to another.
 Duration _kToggleDuration = const Duration(milliseconds: 200);

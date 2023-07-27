@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' hide Checkbox;
-import 'package:vaipoing_test/checkbox.dart';
+import 'package:vaipoing_test/customized_widgets/checkbox.dart';
 
 class CheckboxRed extends StatefulWidget {
   final bool? value;

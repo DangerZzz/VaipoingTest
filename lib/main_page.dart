@@ -5,6 +5,9 @@ import 'package:vaipoing_test/checkBoxes/check_green.dart';
 import 'package:vaipoing_test/checkBoxes/check_red.dart';
 import 'package:vaipoing_test/checkBoxes/check_yellow.dart';
 
+/// Главная страница приложения, вызывается из [main]
+///
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -16,15 +19,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controllerRed.close();
-    _controllerYellow.close();
-    _controllerGreen.close();
-    _controllerDuration.close();
-    super.dispose();
   }
 
   ///Стримы для контроллеров значений чекбоксов
@@ -60,6 +54,7 @@ class _MainPageState extends State<MainPage> {
   bool greenFlag = true;
   bool yellowFlag = false;
 
+  /// Переменная длительности
   Duration duration = const Duration(milliseconds: 200);
 
   @override
@@ -77,7 +72,7 @@ class _MainPageState extends State<MainPage> {
                   height: MediaQuery.of(context).size.height - kToolbarHeight,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 100.0),
+                  padding: const EdgeInsets.only(bottom: 96.0),
                   child: Align(
                     alignment: Alignment.center,
                     child: Column(
@@ -93,7 +88,7 @@ class _MainPageState extends State<MainPage> {
                           ],
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
+                          padding: EdgeInsets.only(top: 12.0),
                           child: Text('AnimationDuration'),
                         ),
                         Slider(
@@ -117,8 +112,8 @@ class _MainPageState extends State<MainPage> {
                           },
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text('${duration.inMilliseconds}'),
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Text('${duration.inMilliseconds} ms'),
                         ),
                       ],
                     ),
@@ -284,5 +279,15 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
+  }
+
+  /// Закрытие потоков
+  @override
+  void dispose() {
+    _controllerRed.close();
+    _controllerYellow.close();
+    _controllerGreen.close();
+    _controllerDuration.close();
+    super.dispose();
   }
 }
