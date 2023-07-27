@@ -18,37 +18,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-
-    listCheck.add(
-      StreamBuilder(
-        stream: _controllerDuration.stream,
-        initialData: duration,
-        builder:
-            (BuildContext context, AsyncSnapshot<Duration> snapshotDuration) {
-          return StreamBuilder(
-            stream: _checkBoxGreenStream,
-            initialData: greenFlag,
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              return CustomCheckbox(
-                value: snapshot.data,
-                color: Colors.green,
-                duration: snapshotDuration.data,
-                onTap: (changedValue) {
-                  if (redFlag || yellowFlag) {
-                    redFlag = false;
-                    yellowFlag = false;
-                    _controllerYellow.add(false);
-                    _controllerRed.add(false);
-                  }
-                  _controllerGreen.add(changedValue);
-                  greenFlag = changedValue;
-                },
-              );
-            },
-          );
-        },
-      ),
-    );
   }
 
   ///Стримы для контроллеров значений чекбоксов
@@ -108,19 +77,17 @@ class _MainPageState extends State<MainPage> {
                     alignment: Alignment.center,
                     child: Column(
                       children: [
-                        listCheck.length == 1
-                            ? listCheck[0]
-                            : GridView.count(
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                crossAxisCount: 7,
-                                children: List.generate(
-                                  listCheck.length,
-                                  (index) {
-                                    return listCheck[index];
-                                  },
-                                ),
-                              ),
+                        GridView.count(
+                          shrinkWrap: true,
+                          physics: const ScrollPhysics(),
+                          crossAxisCount: 7,
+                          children: List.generate(
+                            listCheck.length,
+                            (index) {
+                              return listCheck[index];
+                            },
+                          ),
+                        ),
                         const Padding(
                           padding: EdgeInsets.only(top: 12.0),
                           child: Text('AnimationDuration'),
